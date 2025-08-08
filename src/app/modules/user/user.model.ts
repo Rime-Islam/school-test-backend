@@ -1,8 +1,8 @@
 import { Schema, model } from "mongoose";
 import bcrypt from "bcrypt";
 import type { IUser, TUserModel } from "./user.interface.js";
-import { generateOTP } from "../../utils/otpGenerator.js";
-import { emailVerificationOTP } from "../../utils/sendEmail.js";
+import { generateOTP } from "../../shared/otpGenerator.js";
+import { emailVerificationOTP } from "../../shared/sendEmail.js";
 
 const UserSchema = new Schema<IUser, TUserModel>(
   {
@@ -65,7 +65,7 @@ UserSchema.statics.verifyOTP = async function (user: IUser, code: string) {
   if (!user.otp || !user.otp.code || !user.otp.expiresAt) {
     throw new Error('No OTP found');
   }
-  
+  console.log(code)
   if (user.otp.code !== code) {
     throw new Error('Invalid OTP');
   }
@@ -77,21 +77,5 @@ UserSchema.statics.verifyOTP = async function (user: IUser, code: string) {
   return true;
 };
 
-UserSchema.statics.resendOTP = async function (email: string) {
-  const user = await this.findOne({ email });
-  
-  if (!user) {
-    throw new Error('User not found');
-  }
-  
-  const otp = generateOTP();
-  
-  user.otp = otp;
-  await user.save();
-  
-  emailVerificationOTP(user.email, otp.code, user.name);
-  
-  return true;
-};
 
 export const User = model<IUser, TUserModel>("User", UserSchema);

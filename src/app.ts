@@ -2,9 +2,9 @@ import cors from "cors";
 import express from "express";
 import type { Application, NextFunction, Request, Response } from "express";
 import globalErrorHandler from "./app/middlewares/globalErrorHandler.js";
-import routes from "./app/routes/index.js";
 import NotFound from "./app/middlewares/NotFound.js";
 import cookieParser from "cookie-parser";
+import routes from "./app/routes/index.js";
 
 const app: Application = express();
 
@@ -20,7 +20,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(cookieParser());
-app.use('/api/v1/', routes);
+app.use('/api/v1', routes);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("School test working  successfully");
@@ -39,7 +39,5 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
 });
 
 app.use(globalErrorHandler);
-app.use(NotFound);
-
-
+// app.use(NotFound);
 export default app;

@@ -30,7 +30,4 @@ export type TUserModel = {
     user: IUser,
     code: string
   ): Promise<boolean>;
-  resendOTP(
-    email: string
-  ): Promise<boolean>;
 } & Model<IUser>;

@@ -1,13 +1,11 @@
 import type { Request, Response } from "express";
-import catchAsync from "../../utils/catchAsync.js";
-import sendResponse from "../../utils/sendResponse.js";
 import { UserService } from "./user.service.js";
 import httpStatus from "http-status";
-import config from "../../config/index.js";
+import catchAsync from "../../shared/catchAsync.js";
+import sendResponse from "../../shared/sendResponse.js";
 
 const createUser = catchAsync(async (req: Request, res: Response) => {
-  const userData = req.body;
-  const result = await UserService.createUser(userData);
+  const result = await UserService.createUser(req.body);
 
   sendResponse(res, {
     statusCode: httpStatus.CREATED,
@@ -17,53 +15,9 @@ const createUser = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const loginUser = catchAsync(async (req: Request, res: Response) => {
-  const result = await UserService.loginUser(req.body);
-
-  const cookieOptions = {
-    secure: config.NODE_ENV === "production",
-    httpOnly: true,
-  };
-
-  res.cookie("refreshToken", result.refreshToken, cookieOptions);
-
-  sendResponse(res, {
-    statusCode: 200,
-    success: true,
-    message: "User logged in successfully",
-    data: {
-      accessToken: result.accessToken,
-      user: result.user,
-    },
-  });
-});
-
-const refreshToken = catchAsync(async (req: Request, res: Response) => {
-  const { refreshToken } = req.cookies;
-  const result = await UserService.refreshToken(refreshToken);
-
-  sendResponse(res, {
-    statusCode: 200,
-    success: true,
-    message: "New access token generated successfully",
-    data: result,
-  });
-});
-
-const logoutUser = catchAsync(async (req: Request, res: Response) => {
-  res.clearCookie("refreshToken");
-
-  sendResponse(res, {
-    statusCode: 200,
-    success: true,
-    message: "User logged out successfully",
-    data: "",
-  });
-});
-
 const verifyEmail = catchAsync(async (req, res) => {
-  const {email, otp} = req.body;
-  const result = await UserService.verifyEmailOTP(email, otp);
+  const { email, code } = req.body;
+  const result = await UserService.verifyEmailOTP(email, code);
 
   sendResponse(res, {
     statusCode: 200,
@@ -73,10 +27,29 @@ const verifyEmail = catchAsync(async (req, res) => {
   });
 });
 
+const resendOTP = catchAsync(async (req: Request, res: Response) => {
+  const { email } = req.body;
+
+  if (!email) {
+    return res.status(400).json({
+      success: false,
+      message: 'Email is required'
+    });
+  }
+
+  const result = await UserService.resendOTPService(email);
+
+    sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "OTP resend successful",
+    data: result,
+  });
+
+});
+
 export const UserController = {
   createUser,
-  loginUser,
-  logoutUser,
-  refreshToken,
   verifyEmail,
+  resendOTP,
 };
