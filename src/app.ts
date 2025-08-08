@@ -1,6 +1,7 @@
 import cors from 'cors';
 import express from 'express';
 import type { Application, NextFunction, Request, Response } from 'express';
+import globalErrorHandler from './middlewares/globalErrorHandler.js';
 
 const app: Application = express();
 
@@ -21,10 +22,10 @@ app.use(express.urlencoded({ extended: true }));
 
 
 app.get('/', (req: Request, res: Response) => {
-  res.send('Working  successfully');
+  res.send('School test working  successfully');
 });
 
-
+app.use(globalErrorHandler);
 // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   const statusCode = err.statusCode || 500;
