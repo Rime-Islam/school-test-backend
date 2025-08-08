@@ -9,7 +9,10 @@ import routes from "./app/routes/index.js";
 const app: Application = express();
 
 const corsOptions = {
-  origin: ["http://localhost:5173"],
+  origin: [
+    // "https://godly-music.surge.sh"
+    "http://localhost:5173"
+  ],
   credentials: true,
 };
 

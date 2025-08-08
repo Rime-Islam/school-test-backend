@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-namespace */
 import type { NextFunction, Request, Response } from 'express';
 import httpStatus from 'http-status';
 import type mongoose from 'mongoose';
@@ -7,17 +8,18 @@ import ApiError from '../errors/ApiError.js';
 import jwt, { type JwtPayload } from 'jsonwebtoken';
 import sendResponse from '../shared/sendResponse.js';
 
-declare global {
-  namespace Express {
-    interface Request {
-      user?: (JwtPayload & {
-        _id: mongoose.Types.ObjectId;
-        name: string;
-        role: string;
-      }) | null;
-    }
-  }
-}
+// declare global {
+//   namespace Express {
+//     export interface Request {
+//       user: {
+//         _id: mongoose.Types.ObjectId;
+//         userId: string;
+//         userName: string;
+//         role: string;
+//       };
+//     }
+//   }
+// }
 
 export const isAuth =
   (...requiredRoles: string[]) =>
