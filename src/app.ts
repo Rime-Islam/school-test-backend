@@ -1,0 +1,40 @@
+import cors from 'cors';
+import express from 'express';
+import type { Application, NextFunction, Request, Response } from 'express';
+
+const app: Application = express();
+
+const corsOptions = {
+  origin: [
+    'http://localhost:5173',
+
+  ],
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
+
+//parser
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+
+
+app.get('/', (req: Request, res: Response) => {
+  res.send('Working  successfully');
+});
+
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+  const statusCode = err.statusCode || 500;
+  const message = err.message || 'Internal Server Error';
+
+  res.status(statusCode).json({
+    success: false,
+    message,
+    ...(process.env.NODE_ENV !== 'production' && { stack: err.stack }),
+  });
+});
+
+export default app;
