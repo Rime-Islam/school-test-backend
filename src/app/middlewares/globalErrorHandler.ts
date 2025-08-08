@@ -5,7 +5,6 @@ import ApiError from "../errors/ApiError.js";
 import handleCastError from "../errors/handleCastError.js";
 import config from "../config/index.js";
 
-
 const globalErrorHandler: ErrorRequestHandler = (err: any, req, res, next) => {
   let statusCode = 500;
   let message = "Something went wrong";
