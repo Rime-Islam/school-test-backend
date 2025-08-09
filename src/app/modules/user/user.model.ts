@@ -1,8 +1,6 @@
 import { Schema, model } from "mongoose";
 import bcrypt from "bcrypt";
 import type { IUser, TUserModel } from "./user.interface.js";
-import { generateOTP } from "../../shared/otpGenerator.js";
-import { emailVerificationOTP } from "../../shared/sendEmail.js";
 
 const UserSchema = new Schema<IUser, TUserModel>(
   {

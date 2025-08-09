@@ -27,7 +27,7 @@ const calculatePagination = (options: IOptions): IReturn => {
   return {
     page,
     limit,
-    skip,
+    skip, 
     sortBy,
     sortOrder,
   };
