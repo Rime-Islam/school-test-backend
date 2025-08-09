@@ -6,9 +6,11 @@ import pick from "../../shared/pick.js";
 import { paginationFields } from "../../constants/paginationConst.js";
 import type { Request, Response } from "express";
 
-
 const createQuestion = catchAsync(async (req: Request, res: Response) => {
-  const result = await QuestionService.createQuestion(req.body);
+  const user = req.user;
+  const id = user?._id;
+
+  const result = await QuestionService.createQuestion(req.body, id as string);
 
   sendResponse(res, {
     statusCode: httpStatus.CREATED,
@@ -33,19 +35,35 @@ const getAllQuestions = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const updateQuestion = catchAsync(async (req: Request, res: Response) => {
+const getQuestionById = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
-  const updatedData = req.body;
-  const result = await QuestionService.updateQuestion(id as string, updatedData);
+  
+  const question = await QuestionService.getQuestionById(id as string);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Question updated successfully',
-    data: result,
+    message: "Question retrieved successfully",
+    data: question,
   });
 });
 
+const updateQuestion = catchAsync(async (req: Request, res: Response) => {
+  const { Id } = req.params;
+
+  const updatedData = req.body.data;
+  const result = await QuestionService.updateQuestion(
+    Id as string,
+    updatedData
+  );
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Question updated successfully",
+    data: result,
+  });
+});
 
 const deleteQuestion = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
@@ -54,16 +72,15 @@ const deleteQuestion = catchAsync(async (req: Request, res: Response) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Question deleted successfully',
+    message: "Question deleted successfully",
     data: result,
   });
 });
 
-
 export const QuestionController = {
-    createQuestion,
-    getAllQuestions,
-    updateQuestion,
-    deleteQuestion,
-
-}
+  createQuestion,
+  getAllQuestions,
+  updateQuestion,
+  deleteQuestion,
+  getQuestionById,
+};

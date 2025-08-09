@@ -2,7 +2,7 @@ import { Model, Types, type ObjectId } from "mongoose";
 
 export interface IQuestion {
   _id: Types.ObjectId;
-  createdBy: ObjectId; 
+  createdBy: ObjectId | string; 
   text: string; 
   options: {
     text: string; 

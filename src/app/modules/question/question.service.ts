@@ -4,7 +4,7 @@ import type { IQuestion, IQuestionFilter } from "./question.interface.js";
 import { Question } from "./question.model.js";
 import httpStatus from "http-status";
 
-const createQuestion = async (payload: IQuestion) => {
+const createQuestion = async (payload: IQuestion, id: string) => {
   if (!payload.options || payload.options.length < 2) {
     throw new ApiError(httpStatus.BAD_REQUEST, "At least two options are required.");
   }
@@ -19,6 +19,7 @@ const createQuestion = async (payload: IQuestion) => {
     throw new ApiError(httpStatus.BAD_REQUEST, "Correct answer could not be determined.");
   }
   payload.correctAnswer = correctOption.text;
+  payload.createdBy = id;
 
   const question = await Question.create(payload);
   return { question };
@@ -39,6 +40,7 @@ const getAllQuestions = async (filters: IQuestionFilter, options: any) => {
 
   const questions = await Question.find(query)
     .sort({ [sortBy]: sortOrder })
+    .populate('createdBy')
     .skip(skip)
     .limit(limit);
 
@@ -55,7 +57,7 @@ const getAllQuestions = async (filters: IQuestionFilter, options: any) => {
 };
 
 const updateQuestion = async (id: string, payload: Partial<IQuestion>) => {
-   if (!payload.options || payload.options.length < 2) {
+    if (!payload.options || payload.options.length < 2) {
     throw new ApiError(httpStatus.BAD_REQUEST, "At least two options are required.");
   }
 
@@ -92,10 +94,21 @@ const deleteQuestion = async (id: string) => {
   return question;
 };
 
+const getQuestionById = async (id: string) => {
+  const question = await Question.findById(id);
+
+  if (!question) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Question not found');
+  }
+
+  return question;
+};
+
 export const QuestionService = {
   createQuestion,
   getAllQuestions,
   updateQuestion,
   deleteQuestion,
+  getQuestionById,
 
 };
