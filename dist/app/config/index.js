@@ -8,6 +8,6 @@ export default {
     refresh_expires_in: '90d',
     user_name: 'rimeislam672@gmail.com',
     password: 'qgxw lmec gmal dxbo',
-    frontend_url: 'https://godly-music.surge.sh'
+    frontend_url: 'https://school-test-frontend-dolz.vercel.app'
 };
 //# sourceMappingURL=index.js.map

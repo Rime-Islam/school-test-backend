@@ -6,14 +6,10 @@ import cookieParser from "cookie-parser";
 import routes from "./app/routes/index.js";
 const app = express();
 const corsOptions = {
-    origin: [
-        "https://godly-music.surge.sh"
-        // "http://localhost:5173"
-    ],
+    origin: ["https://school-test-frontend-dolz.vercel.app"],
     credentials: true,
 };
 app.use(cors(corsOptions));
-app.options("*", cors(corsOptions));
 //parser
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

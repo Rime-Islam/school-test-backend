@@ -56,7 +56,7 @@ const forgetPassword = async (email) => {
         throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
     }
     const resetToken = jwtHelpers.createToken({ userId: user._id, email: user.email }, config.jwtSecret, '15m');
-    const resetUrl = `${config.frontend_url}/reset-password?token=${resetToken}&id=${user._id}`;
+    const resetUrl = `${config.frontend_url}/auth/reset-password?token=${resetToken}&id=${user._id}`;
     await resetPasswordEmail(user.email, resetUrl, user.name);
     return {
         _id: user._id,

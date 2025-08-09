@@ -12,8 +12,9 @@ const createUser = catchAsync(async (req, res) => {
     });
 });
 const verifyEmail = catchAsync(async (req, res) => {
-    const { email, code } = req.body;
-    const result = await UserService.verifyEmailOTP(email, code);
+    const { email, otp } = req.body;
+    console.log(otp, req.body);
+    const result = await UserService.verifyEmailOTP(email, otp);
     sendResponse(res, {
         statusCode: 200,
         success: true,
