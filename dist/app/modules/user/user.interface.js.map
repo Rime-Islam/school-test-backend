@@ -1,1 +1,1 @@
-{"version":3,"file":"user.interface.js","sourceRoot":"","sources":["../../../../src/app/modules/user/user.interface.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,KAAK,EAAE,MAAM,UAAU,CAAC"}
+{"version":3,"file":"user.interface.js","sourceRoot":"","sources":["../../../../src/app/modules/user/user.interface.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,KAAK,EAAE,KAAK,EAAE,MAAM,UAAU,CAAC"}

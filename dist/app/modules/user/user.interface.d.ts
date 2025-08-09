@@ -1,6 +1,6 @@
-import { Model } from "mongoose";
+import { Model, Types } from "mongoose";
 export type IUser = {
-    _id: string;
+    _id: Types.ObjectId;
     name: string;
     email: string;
     password: string;

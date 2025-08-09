@@ -1,2 +1,2 @@
-import { Model } from "mongoose";
+import { Model, Types } from "mongoose";
 //# sourceMappingURL=user.interface.js.map

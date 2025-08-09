@@ -6,7 +6,10 @@ import cookieParser from "cookie-parser";
 import routes from "./app/routes/index.js";
 const app = express();
 const corsOptions = {
-    origin: ["https://school-test-frontend-dolz.vercel.app"],
+    origin: [
+        "https://school-test-frontend-dolz.vercel.app"
+        // "http://localhost:5173"
+    ],
     credentials: true,
 };
 app.use(cors(corsOptions));

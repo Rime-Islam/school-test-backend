@@ -1,13 +1,13 @@
 import type { IUser } from "./user.interface.js";
 export declare const UserService: {
     createUser: (payload: IUser) => Promise<import("mongoose").Document<unknown, {}, IUser, {}, {}> & IUser & Required<{
-        _id: string;
+        _id: import("mongoose").Types.ObjectId;
     }> & {
         __v: number;
     }>;
     verifyEmailOTP: (email: string, code: string) => Promise<{
         user: import("mongoose").Document<unknown, {}, IUser, {}, {}> & IUser & Required<{
-            _id: string;
+            _id: import("mongoose").Types.ObjectId;
         }> & {
             __v: number;
         };

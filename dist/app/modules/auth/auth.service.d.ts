@@ -4,7 +4,7 @@ export declare const AuthService: {
         accessToken: string;
         refreshToken: string;
         user: {
-            _id: string;
+            _id: import("mongoose").Types.ObjectId;
             name: string;
             email: string;
             role: "admin" | "student" | "supervisor";
@@ -14,16 +14,16 @@ export declare const AuthService: {
         accessToken: string;
     }>;
     forgetPassword: (email: string) => Promise<{
-        _id: string;
+        _id: import("mongoose").Types.ObjectId;
         email: string;
     }>;
     resetPassword: (token: string, userId: string, newPassword: string) => Promise<{
-        _id: string;
+        _id: import("mongoose").Types.ObjectId;
         email: string;
     }>;
     changePassword: (email: string, currentPassword: string, newPassword: string) => Promise<{
         updatedUser: import("mongoose").Document<unknown, {}, IUser, {}, {}> & IUser & Required<{
-            _id: string;
+            _id: import("mongoose").Types.ObjectId;
         }> & {
             __v: number;
         };
