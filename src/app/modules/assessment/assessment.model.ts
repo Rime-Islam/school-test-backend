@@ -4,6 +4,7 @@ import type { IAssessmentSession } from "./assessment.inerface.js";
 const AssessmentAnswerSchema = new Schema({
   questionId: {
     type: Types.ObjectId,
+    ref: "Question",
     required: true,
   },
   selectedAnswer: {

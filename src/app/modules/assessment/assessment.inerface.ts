@@ -14,7 +14,7 @@ export interface IAssessmentResult {
 
 export interface IAssessmentSession {
   _id: Types.ObjectId;
-  userId: ObjectId;
+  userId: ObjectId | string;
   currentStep: 1 | 2 | 3;
   status: "in-progress" | "completed" | "abandoned";
   answers?: IAssessmentAnswer[];

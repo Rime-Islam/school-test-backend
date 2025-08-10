@@ -5,11 +5,11 @@ import { isAuth } from "../../middlewares/isAuth.middleware.js";
 
 const router = express.Router();
 
-// router.post(
-//   '/',
-//   isAuth(ENUM_USER_ROLE.STUDENT),
-//   AssessmentSessionController.createAssessmentSession
-// );
+router.patch(
+  '/',
+  isAuth(ENUM_USER_ROLE.STUDENT),
+  AssessmentSessionController.createAssessmentSession
+);
 
 router.post(
   '/user',

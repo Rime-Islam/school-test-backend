@@ -7,9 +7,16 @@ import type {
 import httpStatus from "http-status";
 import { AssessmentSession } from "./assessment.model.js";
 
-const createAssessmentSession = async (payload: IAssessmentSession) => {
-  const result = await AssessmentSession.create(payload);
-  return result;
+const createAssessmentSession = async (userId: string, payload: IAssessmentAnswer) => {
+const session = await AssessmentSession.findOne({ userId });
+
+const sessionId = session?._id;
+const result = await AssessmentSession.findByIdAndUpdate(
+  sessionId,
+  { $push: { answers: { $each: payload } } },
+  { new: true }
+);
+return result;
 };
 
 const getAssessmentSessionById = async (id: string) => {

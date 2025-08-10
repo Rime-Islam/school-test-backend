@@ -7,8 +7,11 @@ import type { IAssessmentSession } from "./assessment.inerface.js";
 
 const createAssessmentSession = catchAsync(
   async (req: Request, res: Response) => {
+      const user = req.user;
+    const userId = user?._id;
+
     const result = await AssessmentSessionService.createAssessmentSession(
-      req.body
+      userId, req.body
     );
     sendResponse<IAssessmentSession>(res, {
       statusCode: httpStatus.CREATED,
