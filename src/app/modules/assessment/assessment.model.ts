@@ -47,7 +47,7 @@ const AssessmentSessionSchema = new Schema<IAssessmentSession>(
     },
     status: {
       type: String,
-      enum: ["in-progress", "completed", "abandoned"],
+      enum: ["in-progress", "completed", "abandoned", "proceed"],
       default: "in-progress",
     },
     answers: {

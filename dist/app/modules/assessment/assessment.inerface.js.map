@@ -1,1 +1,1 @@
-{"version":3,"file":"assessment.inerface.js","sourceRoot":"","sources":["../../../../src/app/modules/assessment/assessment.inerface.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,KAAK,EAAE,KAAK,EAAE,MAAM,UAAU,CAAC"}
+{"version":3,"file":"assessment.inerface.js","sourceRoot":"","sources":["../../../../src/app/modules/assessment/assessment.inerface.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,KAAK,EAAE,KAAK,EAAiB,MAAM,UAAU,CAAC"}

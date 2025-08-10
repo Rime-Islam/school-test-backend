@@ -10,8 +10,8 @@ const app: Application = express();
 
 const corsOptions = {
   origin: [
-    // "https://school-test-frontend-dolz.vercel.app"
-    "http://localhost:5173"
+    "https://school-test-frontend-dolz.vercel.app"
+    // "http://localhost:5173"
   ],
   credentials: true,
 };

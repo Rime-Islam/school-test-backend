@@ -1,26 +1,22 @@
-import { Model, Types } from "mongoose";
+import { Model, Types, type ObjectId } from "mongoose";
 export interface IAssessmentAnswer {
     questionId: Types.ObjectId;
     selectedAnswer: string;
     isCorrect: boolean;
-    timeSpent: number;
-    timestamp: Date;
 }
 export interface IAssessmentResult {
     step: 1 | 2 | 3;
     score: number;
-    certifiedLevel?: "A1" | "A2" | "B1" | "B2" | "C1" | "C2";
+    certifiedLevel?: "0" | "A1" | "A2" | "B1" | "B2" | "C1" | "C2";
 }
 export interface IAssessmentSession {
     _id: Types.ObjectId;
-    userId: Types.ObjectId;
+    userId: ObjectId | string;
     currentStep: 1 | 2 | 3;
-    status: "in-progress" | "completed" | "abandoned";
-    answers: IAssessmentAnswer[];
+    status: "in-progress" | "completed" | "abandoned" | 'proceed';
+    answers?: IAssessmentAnswer[];
     results?: IAssessmentResult[];
-    highestCertifiedLevel?: "A1" | "A2" | "B1" | "B2" | "C1" | "C2";
-    startedAt: Date;
-    completedAt?: Date;
+    highestCertifiedLevels?: ("A1" | "A2" | "B1" | "B2" | "C1" | "C2")[];
 }
 export type AssessmentSessionModel = Model<IAssessmentSession>;
 //# sourceMappingURL=assessment.inerface.d.ts.map

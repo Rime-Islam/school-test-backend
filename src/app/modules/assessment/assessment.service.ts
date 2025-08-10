@@ -45,7 +45,9 @@ const getAssessmentSessionsByUser = async (userId: string) => {
 };
 
 const getAssessmentByUser = async (userId: string) => {
-  const results = await AssessmentSession.find({ userId: userId });
+  const results = await  AssessmentSession
+  .find({ userId: userId })
+  .populate("userId", "name email");
 
   if (!results || results.length === 0) {
    throw new ApiError(httpStatus.NOT_FOUND, "Assessment session not found");
@@ -120,10 +122,12 @@ const updateAssessmentSession = async (id: string) => {
   session.results.push(result);
   session.answers = [];
 
-  if (percentage < 25) {
+if (percentage < 25) {
   session.status = 'abandoned';
-} else if (percentage < 75) {
+} else if (percentage >= 25 && percentage < 75) {
   session.status = 'completed';
+} else if (percentage >= 75) {
+  session.status = 'proceed';
 } else {
   session.status = 'in-progress';
 }

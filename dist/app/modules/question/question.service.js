@@ -6,11 +6,11 @@ const createQuestion = async (payload, id) => {
     if (!payload.options || payload.options.length < 2) {
         throw new ApiError(httpStatus.BAD_REQUEST, "At least two options are required.");
     }
-    const correctCount = payload.options.filter(opt => opt.isCorrect).length;
+    const correctCount = payload.options.filter((opt) => opt.isCorrect).length;
     if (correctCount !== 1) {
         throw new ApiError(httpStatus.BAD_REQUEST, "Exactly one option must be marked as correct.");
     }
-    const correctOption = payload.options.find(opt => opt.isCorrect);
+    const correctOption = payload.options.find((opt) => opt.isCorrect);
     if (!correctOption) {
         throw new ApiError(httpStatus.BAD_REQUEST, "Correct answer could not be determined.");
     }
@@ -26,11 +26,15 @@ const getAllQuestions = async (filters, options) => {
         query.competency = filters.competency;
     }
     if (filters.level) {
-        query.level = filters.level;
+        const levels = filters.level
+            .toString()
+            .split(",")
+            .map((l) => l.trim());
+        query.level = levels.length > 1 ? { $in: levels } : levels[0];
     }
     const questions = await Question.find(query)
         .sort({ [sortBy]: sortOrder })
-        .populate('createdBy')
+        .populate("createdBy")
         .skip(skip)
         .limit(limit);
     const total = await Question.countDocuments(query);
@@ -47,11 +51,11 @@ const updateQuestion = async (id, payload) => {
     if (!payload.options || payload.options.length < 2) {
         throw new ApiError(httpStatus.BAD_REQUEST, "At least two options are required.");
     }
-    const correctCount = payload.options.filter(opt => opt.isCorrect).length;
+    const correctCount = payload.options.filter((opt) => opt.isCorrect).length;
     if (correctCount !== 1) {
         throw new ApiError(httpStatus.BAD_REQUEST, "Exactly one option must be marked as correct.");
     }
-    const correctOption = payload.options.find(opt => opt.isCorrect);
+    const correctOption = payload.options.find((opt) => opt.isCorrect);
     if (!correctOption) {
         throw new ApiError(httpStatus.BAD_REQUEST, "Correct answer could not be determined.");
     }
@@ -61,21 +65,21 @@ const updateQuestion = async (id, payload) => {
         runValidators: true,
     });
     if (!question) {
-        throw new ApiError(httpStatus.NOT_FOUND, 'Question not found');
+        throw new ApiError(httpStatus.NOT_FOUND, "Question not found");
     }
     return question;
 };
 const deleteQuestion = async (id) => {
     const question = await Question.findByIdAndDelete({ _id: id });
     if (!question) {
-        throw new ApiError(httpStatus.NOT_FOUND, 'Question not found');
+        throw new ApiError(httpStatus.NOT_FOUND, "Question not found");
     }
     return question;
 };
 const getQuestionById = async (id) => {
     const question = await Question.findById(id);
     if (!question) {
-        throw new ApiError(httpStatus.NOT_FOUND, 'Question not found');
+        throw new ApiError(httpStatus.NOT_FOUND, "Question not found");
     }
     return question;
 };

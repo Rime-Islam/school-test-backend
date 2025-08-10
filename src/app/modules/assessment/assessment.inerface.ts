@@ -16,7 +16,7 @@ export interface IAssessmentSession {
   _id: Types.ObjectId;
   userId: ObjectId | string;
   currentStep: 1 | 2 | 3;
-  status: "in-progress" | "completed" | "abandoned" | 'Proceed';
+  status: "in-progress" | "completed" | "abandoned" | 'proceed';
   answers?: IAssessmentAnswer[];
   results?: IAssessmentResult[];
   highestCertifiedLevels?: ("A1" | "A2" | "B1" | "B2" | "C1" | "C2")[];
