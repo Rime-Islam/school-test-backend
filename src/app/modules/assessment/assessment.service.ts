@@ -54,71 +54,90 @@ const getAssessmentByUser = async (userId: string) => {
   return results;
 };
 
-const updateAssessmentSession = async (
-  id: string,
-  payload: Partial<IAssessmentSession>
-): Promise<IAssessmentSession | null> => {
-  const result = await AssessmentSession.findByIdAndUpdate(id, payload, {
-    new: true,
-  });
-  if (!result) {
+const updateAssessmentSession = async (id: string) => {
+  const session = await AssessmentSession.findOne({ _id: id });
+
+  if (!session) {
     throw new ApiError(httpStatus.NOT_FOUND, "Assessment session not found");
   }
-  return result;
+  if (!session.answers || session.answers.length === 0) {
+    throw new ApiError(httpStatus.BAD_REQUEST, "No answers found in assessment");
+  }
+
+  const totalQuestions = session.answers.length;
+  const correctAnswers = session.answers.filter(answer => answer.isCorrect).length;
+  const percentage = Math.round((correctAnswers / totalQuestions) * 100);
+
+  let result: IAssessmentResult = {
+    step: session.currentStep,
+    score: percentage,
+  };
+
+  switch (session.currentStep) {
+    case 1:
+      if (percentage < 25) {
+        result.certifiedLevel = '0';
+      } else if (percentage < 50) {
+        result.certifiedLevel = 'A1';
+      } else if (percentage < 75) {
+        result.certifiedLevel = 'A2';
+      } else {
+        result.certifiedLevel = 'A2';
+        session.currentStep = 2;
+        session.highestCertifiedLevels = ["B1", "B2"]
+      }
+      break;
+
+    case 2:
+      if (percentage < 25) {
+        result.certifiedLevel = "0";
+      } else if (percentage < 50) {
+        result.certifiedLevel = 'B1';
+      } else if (percentage < 75) {
+        result.certifiedLevel = 'B2';
+      } else {
+        result.certifiedLevel = 'B2';
+        session.currentStep = 3;
+        session.highestCertifiedLevels = ["C1", "C2"]
+      }
+      break;
+
+    case 3:
+      if (percentage < 25) {
+        result.certifiedLevel = "0";
+      } else if (percentage < 50) {
+        result.certifiedLevel = 'C1';
+      } else {
+        result.certifiedLevel = 'C2';
+      }
+      break;
+
+    default:
+      throw new ApiError(httpStatus.BAD_REQUEST, "Invalid current step");
+  }
+
+  session.results = session.results || [];
+  session.results.push(result);
+  session.answers = [];
+
+  if (percentage < 25) {
+  session.status = 'abandoned';
+} else if (percentage < 75) {
+  session.status = 'completed';
+} else {
+  session.status = 'in-progress';
+}
+
+  await session.save();
+
+  return session;
 };
 
-const deleteAssessmentSession = async (
-  id: string
-): Promise<IAssessmentSession | null> => {
-  const result = await AssessmentSession.findByIdAndDelete(id);
-  if (!result) {
-    throw new ApiError(httpStatus.NOT_FOUND, "Assessment session not found");
-  }
-  return result;
-};
-
-const addAnswerToSession = async (
-  sessionId: string,
-  answer: IAssessmentAnswer
-): Promise<IAssessmentSession | null> => {
-  const result = await AssessmentSession.findByIdAndUpdate(
-    sessionId,
-    { $push: { answers: answer } },
-    { new: true }
-  );
-  if (!result) {
-    throw new ApiError(httpStatus.NOT_FOUND, "Assessment session not found");
-  }
-  return result;
-};
-
-const completeAssessmentSession = async (
-  sessionId: string,
-  results: IAssessmentResult[]
-) => {
-  const result = await AssessmentSession.findByIdAndUpdate(
-    sessionId,
-    {
-      status: "completed",
-      results,
-      completedAt: new Date(),
-      highestCertifiedLevel: results[results.length - 1]?.certifiedLevel,
-    },
-    { new: true }
-  );
-  if (!result) {
-    throw new ApiError(httpStatus.NOT_FOUND, "Assessment session not found");
-  }
-  return result;
-};
 
 export const AssessmentSessionService = {
   createAssessmentSession,
   getAssessmentSessionById,
   getAssessmentSessionsByUser,
   updateAssessmentSession,
-  deleteAssessmentSession,
-  addAnswerToSession,
-  completeAssessmentSession,
   getAssessmentByUser,
 };

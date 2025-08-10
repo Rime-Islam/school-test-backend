@@ -70,71 +70,23 @@ const getUserAssessment = catchAsync(
 const updateAssessmentSession = catchAsync(
   async (req: Request, res: Response) => {
     const { id } = req.params;
-    const result = await AssessmentSessionService.updateAssessmentSession(
-      id as string,
-      req.body
+    const results = await AssessmentSessionService.updateAssessmentSession(
+      id as string
     );
-    sendResponse<IAssessmentSession>(res, {
+    sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
       message: "Assessment session updated successfully",
-      data: result,
+      data: results,
     });
   }
 );
 
-const deleteAssessmentSession = catchAsync(
-  async (req: Request, res: Response) => {
-    const { id } = req.params;
-    const result = await AssessmentSessionService.deleteAssessmentSession(
-      id as string
-    );
-    sendResponse<IAssessmentSession>(res, {
-      statusCode: httpStatus.OK,
-      success: true,
-      message: "Assessment session deleted successfully",
-      data: result,
-    });
-  }
-);
-
-const addAnswer = catchAsync(async (req: Request, res: Response) => {
-  const { sessionId } = req.params;
-  const answer = req.body;
-  const result = await AssessmentSessionService.addAnswerToSession(
-    sessionId as string,
-    answer
-  );
-  sendResponse<IAssessmentSession>(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    message: "Answer added to session successfully",
-    data: result,
-  });
-});
-
-const completeSession = catchAsync(async (req: Request, res: Response) => {
-  const { sessionId } = req.params;
-  const { results } = req.body;
-  const result = await AssessmentSessionService.completeAssessmentSession(
-    sessionId as string,
-    results
-  );
-  sendResponse<IAssessmentSession>(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    message: "Assessment session completed successfully",
-    data: result,
-  });
-});
 
 export const AssessmentSessionController = {
   createAssessmentSession,
   getAssessmentSession,
   getUserAssessmentSessions,
   updateAssessmentSession,
-  deleteAssessmentSession,
-  addAnswer,
-  completeSession,
   getUserAssessment
 };

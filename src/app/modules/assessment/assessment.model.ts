@@ -28,8 +28,8 @@ const AssessmentResultSchema = new Schema({
     required: true,
   },
   certifiedLevel: {
-    type: String,
-    enum: ["A1", "A2", "B1", "B2", "C1", "C2"],
+        type: String,
+        enum: [ "0", "A1", "A2", "B1", "B2", "C1", "C2"],
   },
 });
 

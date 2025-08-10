@@ -5,12 +5,6 @@ import { isAuth } from "../../middlewares/isAuth.middleware.js";
 
 const router = express.Router();
 
-router.patch(
-  '/',
-  isAuth(ENUM_USER_ROLE.STUDENT),
-  AssessmentSessionController.createAssessmentSession
-);
-
 router.post(
   '/user',
   isAuth(ENUM_USER_ROLE.STUDENT),
@@ -23,35 +17,17 @@ router.get(
   AssessmentSessionController.getUserAssessment
 );
 
-// router.get(
-//   '/:id',
-//   isAuth(ENUM_USER_ROLE.STUDENT, ENUM_USER_ROLE.ADMIN),
-//   AssessmentSessionController.getAssessmentSession
-// );
+router.patch(
+  '/',
+  isAuth(ENUM_USER_ROLE.STUDENT),
+  AssessmentSessionController.createAssessmentSession
+);
 
-// router.patch(
-//   '/:id',
-//   isAuth(ENUM_USER_ROLE.STUDENT),
-//   AssessmentSessionController.updateAssessmentSession
-// );
-
-// router.delete(
-//   '/:id',
-//   isAuth(ENUM_USER_ROLE.STUDENT, ENUM_USER_ROLE.ADMIN),
-//   AssessmentSessionController.deleteAssessmentSession
-// );
-
-// router.post(
-//   '/:sessionId/answers',
-//   isAuth(ENUM_USER_ROLE.STUDENT),
-//   AssessmentSessionController.addAnswer
-// );
-
-// router.post(
-//   '/:sessionId/complete',
-//   isAuth(ENUM_USER_ROLE.STUDENT),
-//   AssessmentSessionController.completeSession
-// );
+router.patch(
+  '/:id',
+  isAuth(ENUM_USER_ROLE.STUDENT),
+  AssessmentSessionController.updateAssessmentSession
+);
 
 
 export const AssessmentRoutes = router;

@@ -9,14 +9,14 @@ export interface IAssessmentAnswer {
 export interface IAssessmentResult {
   step: 1 | 2 | 3;
   score: number;
-  certifiedLevel?: "A1" | "A2" | "B1" | "B2" | "C1" | "C2";
+  certifiedLevel?: "0" | "A1" | "A2" | "B1" | "B2" | "C1" | "C2";
 }
 
 export interface IAssessmentSession {
   _id: Types.ObjectId;
   userId: ObjectId | string;
   currentStep: 1 | 2 | 3;
-  status: "in-progress" | "completed" | "abandoned";
+  status: "in-progress" | "completed" | "abandoned" | 'Proceed';
   answers?: IAssessmentAnswer[];
   results?: IAssessmentResult[];
   highestCertifiedLevels?: ("A1" | "A2" | "B1" | "B2" | "C1" | "C2")[];
