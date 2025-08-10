@@ -13,35 +13,52 @@ const createAssessmentSession = catchAsync(
     sendResponse<IAssessmentSession>(res, {
       statusCode: httpStatus.CREATED,
       success: true,
-      message: 'Assessment session created successfully',
+      message: "Assessment session created successfully",
       data: result,
     });
   }
 );
 
-const getAssessmentSession = catchAsync(
-  async (req: Request, res: Response) => {
-    const { id } = req.params;
-    const result = await AssessmentSessionService.getAssessmentSessionById(id as string);
-    sendResponse<IAssessmentSession>(res, {
-      statusCode: httpStatus.OK,
-      success: true,
-      message: 'Assessment session retrieved successfully',
-      data: result,
-    });
-  }
-);
+const getAssessmentSession = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const result = await AssessmentSessionService.getAssessmentSessionById(
+    id as string
+  );
+  sendResponse<IAssessmentSession>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Assessment session retrieved successfully",
+    data: result,
+  });
+});
 
 const getUserAssessmentSessions = catchAsync(
   async (req: Request, res: Response) => {
-    const { userId } = req.params;
+    const user = req.user;
+    const userId = user?._id;
     const results = await AssessmentSessionService.getAssessmentSessionsByUser(
       userId as string
     );
-    sendResponse<IAssessmentSession[]>(res, {
+    sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: 'User assessment sessions retrieved successfully',
+      message: "User assessment sessions retrieved successfully",
+      data: results,
+    });
+  }
+);
+
+const getUserAssessment = catchAsync(
+  async (req: Request, res: Response) => {
+    const user = req.user;
+    const userId = user?._id;
+    const results = await AssessmentSessionService.getAssessmentByUser(
+      userId as string
+    );
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "User assessment sessions retrieved successfully",
       data: results,
     });
   }
@@ -57,7 +74,7 @@ const updateAssessmentSession = catchAsync(
     sendResponse<IAssessmentSession>(res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: 'Assessment session updated successfully',
+      message: "Assessment session updated successfully",
       data: result,
     });
   }
@@ -66,11 +83,13 @@ const updateAssessmentSession = catchAsync(
 const deleteAssessmentSession = catchAsync(
   async (req: Request, res: Response) => {
     const { id } = req.params;
-    const result = await AssessmentSessionService.deleteAssessmentSession(id as string);
+    const result = await AssessmentSessionService.deleteAssessmentSession(
+      id as string
+    );
     sendResponse<IAssessmentSession>(res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: 'Assessment session deleted successfully',
+      message: "Assessment session deleted successfully",
       data: result,
     });
   }
@@ -86,7 +105,7 @@ const addAnswer = catchAsync(async (req: Request, res: Response) => {
   sendResponse<IAssessmentSession>(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Answer added to session successfully',
+    message: "Answer added to session successfully",
     data: result,
   });
 });
@@ -101,7 +120,7 @@ const completeSession = catchAsync(async (req: Request, res: Response) => {
   sendResponse<IAssessmentSession>(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Assessment session completed successfully',
+    message: "Assessment session completed successfully",
     data: result,
   });
 });
@@ -114,4 +133,5 @@ export const AssessmentSessionController = {
   deleteAssessmentSession,
   addAnswer,
   completeSession,
+  getUserAssessment
 };

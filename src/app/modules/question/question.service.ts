@@ -6,17 +6,26 @@ import httpStatus from "http-status";
 
 const createQuestion = async (payload: IQuestion, id: string) => {
   if (!payload.options || payload.options.length < 2) {
-    throw new ApiError(httpStatus.BAD_REQUEST, "At least two options are required.");
+    throw new ApiError(
+      httpStatus.BAD_REQUEST,
+      "At least two options are required."
+    );
   }
 
-  const correctCount = payload.options.filter(opt => opt.isCorrect).length;
+  const correctCount = payload.options.filter((opt) => opt.isCorrect).length;
   if (correctCount !== 1) {
-    throw new ApiError(httpStatus.BAD_REQUEST, "Exactly one option must be marked as correct.");
+    throw new ApiError(
+      httpStatus.BAD_REQUEST,
+      "Exactly one option must be marked as correct."
+    );
   }
 
-  const correctOption = payload.options.find(opt => opt.isCorrect);
+  const correctOption = payload.options.find((opt) => opt.isCorrect);
   if (!correctOption) {
-    throw new ApiError(httpStatus.BAD_REQUEST, "Correct answer could not be determined.");
+    throw new ApiError(
+      httpStatus.BAD_REQUEST,
+      "Correct answer could not be determined."
+    );
   }
   payload.correctAnswer = correctOption.text;
   payload.createdBy = id;
@@ -26,7 +35,8 @@ const createQuestion = async (payload: IQuestion, id: string) => {
 };
 
 const getAllQuestions = async (filters: IQuestionFilter, options: any) => {
-  const { page, limit, skip, sortBy, sortOrder } = paginationHelper.calculatePagination(options);
+  const { page, limit, skip, sortBy, sortOrder } =
+    paginationHelper.calculatePagination(options);
 
   const query: Record<string, unknown> = {};
 
@@ -35,12 +45,16 @@ const getAllQuestions = async (filters: IQuestionFilter, options: any) => {
   }
 
   if (filters.level) {
-    query.level = filters.level;
+    const levels = filters.level
+      .toString()
+      .split(",")
+      .map((l) => l.trim());
+    query.level = levels.length > 1 ? { $in: levels } : levels[0];
   }
 
   const questions = await Question.find(query)
     .sort({ [sortBy]: sortOrder })
-    .populate('createdBy')
+    .populate("createdBy")
     .skip(skip)
     .limit(limit);
 
@@ -57,18 +71,27 @@ const getAllQuestions = async (filters: IQuestionFilter, options: any) => {
 };
 
 const updateQuestion = async (id: string, payload: Partial<IQuestion>) => {
-    if (!payload.options || payload.options.length < 2) {
-    throw new ApiError(httpStatus.BAD_REQUEST, "At least two options are required.");
+  if (!payload.options || payload.options.length < 2) {
+    throw new ApiError(
+      httpStatus.BAD_REQUEST,
+      "At least two options are required."
+    );
   }
 
-  const correctCount = payload.options.filter(opt => opt.isCorrect).length;
+  const correctCount = payload.options.filter((opt) => opt.isCorrect).length;
   if (correctCount !== 1) {
-    throw new ApiError(httpStatus.BAD_REQUEST, "Exactly one option must be marked as correct.");
+    throw new ApiError(
+      httpStatus.BAD_REQUEST,
+      "Exactly one option must be marked as correct."
+    );
   }
 
-  const correctOption = payload.options.find(opt => opt.isCorrect);
+  const correctOption = payload.options.find((opt) => opt.isCorrect);
   if (!correctOption) {
-    throw new ApiError(httpStatus.BAD_REQUEST, "Correct answer could not be determined.");
+    throw new ApiError(
+      httpStatus.BAD_REQUEST,
+      "Correct answer could not be determined."
+    );
   }
   payload.correctAnswer = correctOption.text;
 
@@ -78,7 +101,7 @@ const updateQuestion = async (id: string, payload: Partial<IQuestion>) => {
   });
 
   if (!question) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Question not found');
+    throw new ApiError(httpStatus.NOT_FOUND, "Question not found");
   }
 
   return question;
@@ -88,7 +111,7 @@ const deleteQuestion = async (id: string) => {
   const question = await Question.findByIdAndDelete({ _id: id });
 
   if (!question) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Question not found');
+    throw new ApiError(httpStatus.NOT_FOUND, "Question not found");
   }
 
   return question;
@@ -98,7 +121,7 @@ const getQuestionById = async (id: string) => {
   const question = await Question.findById(id);
 
   if (!question) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Question not found');
+    throw new ApiError(httpStatus.NOT_FOUND, "Question not found");
   }
 
   return question;
@@ -110,5 +133,4 @@ export const QuestionService = {
   updateQuestion,
   deleteQuestion,
   getQuestionById,
-
 };
